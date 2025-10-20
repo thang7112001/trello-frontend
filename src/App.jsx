@@ -1,12 +1,11 @@
 import Button from '@mui/material/Button'
-import { AccessAlarm, ThreeDRotation } from '@mui/icons-material';
+import { AccessAlarm } from '@mui/icons-material'
 
 function App() {
- 
 
   return (
     <>
-      <div>dddd</div>
+      <h1>chiến thắng</h1>
       <Button variant="text">Text</Button>
       <Button variant="contained">Contained</Button>
       <Button variant="outlined">Outlined</Button>
