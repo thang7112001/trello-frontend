@@ -1,44 +1,43 @@
-
 module.exports = {
   env: { browser: true, es2020: true, node: true },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:react/jsx-runtime',
+    'plugin:react/jsx-runtime', // Dành cho React 17+ (không cần import)
     'plugin:react-hooks/recommended'
   ],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-  settings: { react: { version: '18.2' } },
+  settings: { react: { version: 'detect' } }, // Tự động phát hiện React 18
   plugins: [
     'react',
     'react-hooks',
     'react-refresh'
   ],
   rules: {
+    // react
     'react-refresh/only-export-components': 'warn',
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
     'react/prop-types': 0,
     'react/display-name': 0,
-     "no-restricted-imports": [
-      "error",
+    //MUI
+    'no-restricted-imports': [
+      'error',
       {
-        "patterns": [{ "regex": "^@mui/[^/]+$" }]
+        patterns: [ '@mui/*' ]
       }
     ],
-
+    //common
     'no-console': 1,
     'no-lonely-if': 1,
     'no-unused-vars': 1,
     'no-trailing-spaces': 1,
     'no-multi-spaces': 1,
     'no-multiple-empty-lines': 1,
-    'space-before-blocks': ['error', 'always'],
-    'object-curly-spacing': [1, 'always'],
-    'indent': ['warn', 2],
-    'semi': [1, 'never'],
-    'quotes': ['error', 'single'],
-    'array-bracket-spacing': 1,
+    'space-before-blocks': [ 'error', 'always' ],
+    'object-curly-spacing': [ 1, 'always' ],
+    'indent': [ 'warn', 2 ],
+    'semi': [ 1, 'never' ],
+    'quotes': [ 'error', 'single' ],
+    'array-bracket-spacing': [ 1, 'always' ],
     'linebreak-style': 0,
     'no-unexpected-multiline': 'warn',
     'keyword-spacing': 1,
