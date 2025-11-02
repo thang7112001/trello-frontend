@@ -11,23 +11,44 @@
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
     />
+    <style>
+    html {
+      /* Chế độ Sáng (Light) làm mặc định */
+      background-color: #FFEDA8; 
+      color: #003631; 
+    }
 
+    html.dark {
+      /* Ghi đè cho Chế độ Tối (Dark) */
+      background-color: #003631; 
+      color: #FFEDA8; 
+    }
+    </style>
   </head>
   <body>
     <script>
     (function() {
-      try {
-        var mode = localStorage.getItem('mui-mode');
-        if (mode) {
-          document.documentElement.classList.add(mode);
-        } else {
-          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-          if (prefersDark) {
-            document.documentElement.classList.add('dark');
-          }
+    try {
+      var mode = localStorage.getItem('mui-mode');
+      var target = document.documentElement;
+
+      if (mode === 'dark') {
+        // 1. Nếu người dùng chọn 'dark'
+        target.classList.add('dark');
+      } else if (mode === 'light') {
+        // 2. Nếu người dùng chọn 'light'
+        // Không cần làm gì, vì CSS trong <head> đã là 'light'
+      } else {
+        // 3. Nếu mode là 'system' hoặc chưa được đặt (null)
+        // Chúng ta kiểm tra cài đặt của hệ điều hành
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          target.classList.add('dark');
         }
-      } catch (e) {}
-    })();
+        // Nếu hệ điều hành là 'light', không cần làm gì.
+      }
+    } catch (e) {}
+  })();
     </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>

@@ -1,33 +1,67 @@
-import Button from '@mui/material/Button'
-import AccessAlarm from '@mui/icons-material/AccessAlarm'
-import Typography from '@mui/material/Typography'
 import { useColorScheme } from '@mui/material/styles'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
+import LightModeIcon from '@mui/icons-material/LightMode'
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined'
+import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness'
+import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
 
-function ModeToggle() {
+function ModeSelect() {
   const { mode, setMode } = useColorScheme()
+  const handleChange = (event) => {
+    const selectedMode = event.target.value
+    setMode(selectedMode)
+    // setAge(event.target.value)
+  }
+
   return (
-    <Button
-      onClick={ () => {
-        setMode(mode === 'light' ? 'dark':'light')
-      }}
-    >
-      {mode === 'light' ? 'turn dark' : 'turn light'}
-    </Button>
+    <FormControl sx={{ m: 1, minWidth: 120 }} size='small'>
+      <InputLabel id='label-select-dark-light-mode'>Mode</InputLabel>
+      <Select
+        labelId='label-select-dark-light-mode'
+        id='select-dark-light-mode'
+        value={mode || ''}
+        label='Mode'
+        onChange={handleChange}
+      >
+        <MenuItem value='light'>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <LightModeIcon/> Light
+          </div>
+        </MenuItem>
+        <MenuItem value='dark'>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <DarkModeOutlinedIcon/> Dark
+          </Box>
+        </MenuItem>
+        <MenuItem value='system'>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <SettingsBrightnessIcon/> System
+          </Box>
+        </MenuItem>
+      </Select>
+    </FormControl>
   )
 }
+
+
 function App() {
 
   return (
-    <>
-      <ModeToggle/>
-      <hr/>
-      <h1>chiến thắng</h1>
-      <Typography variant='body2' color='text.secondary'>test 12</Typography>
-      <Button variant="text">Text</Button>
-      <Button variant="contained">Contained</Button>
-      <Button variant="outlined">Outlined</Button>
-      <AccessAlarm></AccessAlarm>
-    </>
+    <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
+      <Box sx={{ width:'100%', height: (theme) => theme.trello.appBarHeight, display: 'flex', alignItems: 'center', backgroundColor: 'primary.500' }}>
+        <ModeSelect/>
+      </Box>
+      <Box sx={{ width:'100%', height: (theme) => theme.trello.boardBarHeight, display: 'flex', alignItems: 'center', backgroundColor: 'primary.600' }}>
+        Board Bar
+      </Box>
+      <Box sx={{ width:'100%', height: (theme) => `calc(100vh - ${theme.trello.appBarHeight} - ${theme.trello.boardBarHeight})`, display: 'flex', alignItems: 'center', backgroundColor: '' }}>
+        Board Content
+      </Box>
+    </Container>
   )
 }
 
