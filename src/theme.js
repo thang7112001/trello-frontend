@@ -3,8 +3,8 @@ import { extendTheme } from '@mui/material/styles'
 // Create a theme instance.
 const theme = extendTheme({
   trello: {
-    appBarHeight: '48px',
-    boardBarHeight: '58px'
+    appBarHeight: '58px',
+    boardBarHeight: '60px'
   },
   colorSchemeSelector: 'class',
   colorSchemes: {
@@ -30,7 +30,7 @@ const theme = extendTheme({
           900: '#ffdf75'
         },
         secondary: {
-          main: '#FFEDA8'
+          main: '#003631'
         }
       }
     },
@@ -56,7 +56,7 @@ const theme = extendTheme({
           900: '#001814'
         },
         secondary: {
-          main: '#003631'
+          main: '#FFEDA8'
         }
       }
     }
