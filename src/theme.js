@@ -18,16 +18,16 @@ const theme = extendTheme({
         },
         primary: {
           main: '#FFEDA8',
-          50: '#fffef6',
-          100: '#fffbdc',
-          200: '#fff8c2',
-          300: '#fff5a9',
-          400: '#fff28f',
-          500: '#FFEDA8',
-          600: '#ffe57a',
-          700: '#ffd864',
-          800: '#ffcb4d',
-          900: '#ffbe33'
+          50: '#fffefa',
+          100: '#fffdf7',
+          200: '#fffaf0',
+          300: '#fff8ea',
+          400: '#fff5d6',
+          500: '#fff2c2',
+          600: '#ffeebf',
+          700: '#FFEDA8', // <-- MÀU MAIN
+          800: '#ffe78f',
+          900: '#ffdf75'
         },
         secondary: {
           main: '#FFEDA8'
