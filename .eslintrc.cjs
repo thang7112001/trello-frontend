@@ -4,15 +4,12 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime', // Dành cho React 17+ (không cần import)
-    'plugin:react-hooks/recommended'
+    'plugin:react-hooks/recommended',
+    'prettier'
   ],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   settings: { react: { version: 'detect' } }, // Tự động phát hiện React 18
-  plugins: [
-    'react',
-    'react-hooks',
-    'react-refresh'
-  ],
+  plugins: ['react', 'react-hooks', 'react-refresh'],
   rules: {
     // react
     'react-refresh/only-export-components': 'warn',
@@ -22,27 +19,12 @@ module.exports = {
     'no-restricted-imports': [
       'error',
       {
-        patterns: [ '@mui/*/*/*' ]
+        patterns: ['@mui/*/*/*']
       }
     ],
     //common
     'no-console': 1,
     'no-lonely-if': 1,
-    'no-unused-vars': 1,
-    'no-trailing-spaces': 1,
-    'no-multi-spaces': 1,
-    'no-multiple-empty-lines': 1,
-    'space-before-blocks': [ 'error', 'always' ],
-    'object-curly-spacing': [ 1, 'always' ],
-    'indent': [ 'warn', 2 ],
-    'semi': [ 1, 'never' ],
-    'quotes': [ 'error', 'single' ],
-    'array-bracket-spacing': [ 1, 'always' ],
-    'linebreak-style': 0,
-    'no-unexpected-multiline': 'warn',
-    'keyword-spacing': 1,
-    'comma-dangle': 1,
-    'comma-spacing': 1,
-    'arrow-spacing': 1
+    'no-unused-vars': 1
   }
 }

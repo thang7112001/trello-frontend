@@ -10,7 +10,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Check from '@mui/icons-material/Check'
 
 function Starred() {
-  const [ anchorEl, setAnchorEl ] = React.useState(null)
+  const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
@@ -27,7 +27,7 @@ function Starred() {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         sx={{ color: 'text.primary' }}
-        endIcon={<ExpandMoreIcon/>}
+        endIcon={<ExpandMoreIcon />}
       >
         Starred
       </Button>
@@ -38,8 +38,8 @@ function Starred() {
         onClose={handleClose}
         slotProps={{
           list: {
-            'aria-labelledby': 'basic-button',
-          },
+            'aria-labelledby': 'basic-button'
+          }
         }}
       >
         <MenuItem>
