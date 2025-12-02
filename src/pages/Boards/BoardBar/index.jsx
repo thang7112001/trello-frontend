@@ -82,9 +82,16 @@ function BoardBar() {
             Invite
           </Button>
           <AvatarGroup
-            max={4}
+            max={3}
             sx={{
-              '& .MuiAvatar-root': { width: 34, height: 34, fontSize: 16 }
+              '& .MuiAvatar-root': {
+                width: 34,
+                height: 34,
+                fontSize: 16,
+                cursor: 'pointer',
+                color: 'white',
+                '&:first-of-type': { bgcolor: '#a4b0be' }
+              }
             }}
           >
             <Tooltip title='thang711'>
