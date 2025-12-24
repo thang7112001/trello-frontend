@@ -18,8 +18,17 @@ import AddCardIcon from '@mui/icons-material/AddCard'
 import Button from '@mui/material/Button'
 import ListCard from './ListCard/ListCard'
 import { mapOrder } from '../../../../../utils/sort'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 function Column({ column }) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: column._id, data: { ...column } })
+
+  const dndKitColumnStyle = {
+    transform: CSS.Translate.toString(transform),
+    transition
+  }
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -32,6 +41,10 @@ function Column({ column }) {
   const orderedCard = mapOrder(column?.cards, column?.cardOrderIds, '_id')
   return (
     <Box
+      ref={setNodeRef}
+      style={dndKitColumnStyle}
+      {...attributes}
+      {...listeners}
       sx={{
         maxWidth: '300px',
         minWidth: '300px',
