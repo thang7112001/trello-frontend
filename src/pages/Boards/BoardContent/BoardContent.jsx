@@ -17,7 +17,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { arrayMove } from '@dnd-kit/sortable'
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCard/Card/Card'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEmpty } from 'lodash'
+import { generatePlaceholder } from '../../../utils/formatter'
 
 const ACTIVE_DRAG_ITEM_STYLE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_STYLE_COLUMN',
@@ -89,6 +90,11 @@ function BoardContent({ board }) {
         nextActiveCloumn.cards = nextActiveCloumn.cards.filter(
           (card) => card._id !== activeDraggingCardId
         )
+
+        if (isEmpty(nextActiveCloumn.cards)) {
+          nextActiveCloumn.cards = [generatePlaceholder(nextActiveCloumn)]
+        }
+
         //cập nhật lại mảng cho active column
         nextActiveCloumn.cardOrderIds = nextActiveCloumn.cards.map(
           (card) => card._id
@@ -104,6 +110,12 @@ function BoardContent({ board }) {
           ...activeDraggingCardData,
           columnId: nextOverCloumn._id
         })
+
+        //xóa placeholder card khi thêm 1 card bth vào column rỗng
+        nextOverCloumn.cards = nextOverCloumn.cards.filter(
+          (c) => !c.FE_PlaceholderCard
+        )
+
         //cập nhật lại dữ liệu cho over column
         nextOverCloumn.cardOrderIds = nextOverCloumn.cards.map(
           (card) => card._id
@@ -241,7 +253,7 @@ function BoardContent({ board }) {
   const collisionDetectionStrategy = useCallback(
     (args) => {
       if (activeDragItemType === ACTIVE_DRAG_ITEM_STYLE.COLUMN) {
-        return closestCorners(...args)
+        return closestCorners({ ...args })
       }
       //tìm các điểm giao nhau vs con trỏ
       const pointerIntersections = pointerWithin(args)
