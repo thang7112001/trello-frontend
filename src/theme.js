@@ -49,6 +49,23 @@ const theme = extendTheme({
           700: '#003631', // Màu MAIN
           800: '#002b27',
           900: '#001814'
+        },
+        success: {
+          main: '#2e7d32', // Xanh lá đậm (Forest Green) để nổi trên nền vàng
+          light: '#4caf50',
+          dark: '#1b5e20',
+          contrastText: '#fff'
+        },
+        warning: {
+          main: '#ed6c02', // Cam đậm (Burnt Orange) vì màu vàng đã là nền
+          light: '#ff9800',
+          dark: '#e65100',
+          contrastText: '#fff'
+        },
+        error: {
+          main: '#d32f2f',
+          light: '#ef5350',
+          dark: '#c62828'
         }
       }
     },
@@ -85,6 +102,23 @@ const theme = extendTheme({
           700: '#FFEDA8', // <-- MÀU MAIN
           800: '#ffe78f',
           900: '#ffdf75'
+        },
+        success: {
+          main: '#66bb6a', // Xanh lá sáng (Pastel Green) để nổi trên nền tối
+          light: '#81c784',
+          dark: '#388e3c',
+          contrastText: '#003631'
+        },
+        warning: {
+          main: '#ffa726', // Cam sáng (Amber)
+          light: '#ffb74d',
+          dark: '#f57c00',
+          contrastText: '#003631'
+        },
+        error: {
+          main: '#f44336',
+          light: '#e57373',
+          dark: '#d32f2f'
         }
       }
     }
