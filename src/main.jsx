@@ -3,13 +3,17 @@ import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 import CssBaseline from '@mui/material/CssBaseline'
 import theme from './theme.js'
+
+//cấu hình react-toasify
 import { ThemeProvider } from '@mui/material/styles'
+import { ToastContainer } from 'react-toastify'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ThemeProvider theme={theme} defaultMode='system' >
+    <ThemeProvider theme={theme} defaultMode='system'>
       <CssBaseline />
       <App />
+      <ToastContainer theme='colored' position='bottom-left' />
     </ThemeProvider>
   </StrictMode>
 )
