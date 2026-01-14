@@ -57,7 +57,7 @@ function Column({ column }) {
   const [newCardTitle, setNewCardTitle] = useState('')
   const addNewCard = () => {
     if (!newCardTitle) {
-      console.error('please enter title')
+      // console.error('please enter title')
       return
     }
 
@@ -217,6 +217,7 @@ function Column({ column }) {
                 size='small'
                 variant='outlined'
                 autoFocus
+                data-no-dnd='true'
                 value={newCardTitle}
                 onChange={(e) => setNewCardTitle(e.target.value)}
               />

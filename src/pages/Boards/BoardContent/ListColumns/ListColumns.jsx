@@ -17,7 +17,7 @@ function ListColumns({ columns }) {
   const [newColumnTitle, setNewColumnTitle] = useState('')
   const addNewColumn = () => {
     if (!newColumnTitle) {
-      console.error('please enter title')
+      // console.error('please enter title')
       return
     }
 
