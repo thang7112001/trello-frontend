@@ -6,7 +6,11 @@ import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '../../apis/mock-data'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { fetchBoardDetailsAPI } from '../../apis'
+import {
+  fetchBoardDetailsAPI,
+  createNewCardAPI,
+  createNewColumnAPI
+} from '../../apis'
 
 function Board() {
   const [board, setBoard] = useState(null)
@@ -26,12 +30,29 @@ function Board() {
 
     loadBoard()
   }, [id])
+  const createNewColumn = async (newColumnData) => {
+    const createdColumn = await createNewColumnAPI({
+      ...newColumnData,
+      boardId: board?._id
+    })
+  }
+  const createNewCard = async (newCardData) => {
+    const createdCard = await createNewCardAPI({
+      ...newCardData,
+      boardId: board?._id
+    })
+  }
+
   console.log('data', board)
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
       <AppBar />
       <BoardBar board={board} />
-      <BoardContent board={board} />
+      <BoardContent
+        board={board}
+        createNewColumn={createNewColumn}
+        createNewCard={createNewCard}
+      />
     </Container>
   )
 }
