@@ -24,7 +24,7 @@ const ACTIVE_DRAG_ITEM_STYLE = {
   CARD: 'ACTIVE_DRAG_ITEM_STYLE_CARD'
 }
 
-function BoardContent({ board, createNewColumn, createNewCard }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
   // const pointerSensor = useSensor(PointerSensor, {
   //   activationConstraint: { distance: 10 }
   // })
@@ -230,6 +230,8 @@ function BoardContent({ board, createNewColumn, createNewCard }) {
         const dndOrderedColumns = arrayMove(orderedColumns, oldIndex, newIndex)
         // const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id)
         // console.log('keo tha')
+        moveColumns(dndOrderedColumns)
+
         setOrderedColumns(dndOrderedColumns)
       }
     }

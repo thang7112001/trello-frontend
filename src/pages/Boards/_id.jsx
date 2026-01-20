@@ -9,8 +9,11 @@ import { useParams } from 'react-router-dom'
 import {
   fetchBoardDetailsAPI,
   createNewCardAPI,
-  createNewColumnAPI
+  createNewColumnAPI,
+  updateBoardDetailsAPI
 } from '../../apis'
+import { generatePlaceholder } from '../../utils/formatter'
+import { isEmpty } from 'lodash'
 
 function Board() {
   const [board, setBoard] = useState(null)
@@ -21,8 +24,17 @@ function Board() {
       if (!id) return
       try {
         const data = await fetchBoardDetailsAPI(id)
-        setBoard(data)
-        console.log('data', data)
+
+        //xử lý kéo thả card khi column rỗng
+        const newBoard = { ...data }
+        newBoard.columns.forEach((column) => {
+          if (isEmpty(column.cards)) {
+            column.cards = [generatePlaceholder(column)]
+            column.cardOrderIds = [generatePlaceholder(column)._id]
+          }
+        })
+
+        setBoard(newBoard)
       } catch (err) {
         console.error('Failed to fetch board', err)
       }
@@ -35,11 +47,43 @@ function Board() {
       ...newColumnData,
       boardId: board?._id
     })
+
+    //xử lý kéo thả card khi tạo column mới rỗng
+    createdColumn.cards = [generatePlaceholder(createdColumn)]
+    createdColumn.cardOrderIds = [generatePlaceholder(createdColumn)._id]
+
+    const newBoard = { ...board }
+    newBoard.columns.push(createdColumn)
+    newBoard.columnOrderIds.push(createdColumn._id)
+    setBoard(newBoard)
   }
   const createNewCard = async (newCardData) => {
     const createdCard = await createNewCardAPI({
       ...newCardData,
       boardId: board?._id
+    })
+
+    const newBoard = { ...board }
+    const columnToUpdate = newBoard.columns.find(
+      (columns) => columns._id === createdCard.columnId
+    )
+    if (columnToUpdate) {
+      columnToUpdate.cards.push(createdCard)
+      columnToUpdate.cardOrderIds.push(createdCard._id)
+    }
+    setBoard(newBoard)
+  }
+
+  //gọi api kkhi kéo thả column xong
+  const moveColumns = async (dndOrderedColumns) => {
+    const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id)
+    const newBoard = { ...board }
+    newBoard.columns = dndOrderedColumns
+    newBoard.columnOrderIds = dndOrderedColumnsIds
+    setBoard(newBoard)
+
+    await updateBoardDetailsAPI(newBoard._id, {
+      columnOrderIds: dndOrderedColumnsIds
     })
   }
 
@@ -52,6 +96,7 @@ function Board() {
         board={board}
         createNewColumn={createNewColumn}
         createNewCard={createNewCard}
+        moveColumns={moveColumns}
       />
     </Container>
   )
