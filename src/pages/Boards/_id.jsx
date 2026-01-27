@@ -10,10 +10,14 @@ import {
   fetchBoardDetailsAPI,
   createNewCardAPI,
   createNewColumnAPI,
-  updateBoardDetailsAPI
+  updateBoardDetailsAPI,
+  updateColumnDetailsAPI,
+  moveCardToDifferentColumnsApi
 } from '../../apis'
 import { generatePlaceholder } from '../../utils/formatter'
 import { isEmpty } from 'lodash'
+import { mapOrder } from '../../utils/sort'
+import { Box } from '@mui/material'
 
 function Board() {
   const [board, setBoard] = useState(null)
@@ -24,6 +28,8 @@ function Board() {
       if (!id) return
       try {
         const data = await fetchBoardDetailsAPI(id)
+        //sắp xếp dữ liệu các columns trc khi đưa xuống các component con
+        data.columns = mapOrder(data.columns, data.columnOrderIds, '_id')
 
         //xử lý kéo thả card khi column rỗng
         const newBoard = { ...data }
@@ -31,6 +37,9 @@ function Board() {
           if (isEmpty(column.cards)) {
             column.cards = [generatePlaceholder(column)]
             column.cardOrderIds = [generatePlaceholder(column)._id]
+          } else {
+            //sắp xếp dữ liệu các cards trc khi đưa xuống các component con
+            column.cards = mapOrder(column.cards, column.cardOrderIds, '_id')
           }
         })
 
@@ -68,26 +77,78 @@ function Board() {
       (columns) => columns._id === createdCard.columnId
     )
     if (columnToUpdate) {
-      columnToUpdate.cards.push(createdCard)
-      columnToUpdate.cardOrderIds.push(createdCard._id)
+      if (columnToUpdate.cards.some((card) => card.FE_PlaceholderCard)) {
+        columnToUpdate.cards = [createdCard]
+        columnToUpdate.cardOrderIds = [createdCard._id]
+      } else {
+        columnToUpdate.cards.push(createdCard)
+        columnToUpdate.cardOrderIds.push(createdCard._id)
+      }
     }
     setBoard(newBoard)
   }
 
   //gọi api kkhi kéo thả column xong
-  const moveColumns = async (dndOrderedColumns) => {
+  const moveColumns = (dndOrderedColumns) => {
     const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id)
     const newBoard = { ...board }
     newBoard.columns = dndOrderedColumns
     newBoard.columnOrderIds = dndOrderedColumnsIds
     setBoard(newBoard)
 
-    await updateBoardDetailsAPI(newBoard._id, {
+    updateBoardDetailsAPI(newBoard._id, {
       columnOrderIds: dndOrderedColumnsIds
     })
   }
 
-  console.log('data', board)
+  const moveCardInTheSameColumn = (
+    dndOrderedCards,
+    dndOrderedCardIds,
+    columnId
+  ) => {
+    const newBoard = { ...board }
+    const columnToUpdate = newBoard.columns.find(
+      (columns) => columns._id === columnId
+    )
+    if (columnToUpdate) {
+      columnToUpdate.cards = dndOrderedCards
+      columnToUpdate.cardOrderIds = dndOrderedCardIds
+    }
+    setBoard(newBoard)
+
+    updateColumnDetailsAPI(columnId, { cardOrderIds: dndOrderedCardIds })
+  }
+
+  const moveCardToDifferentColumns = (
+    currentCardId,
+    prevColumnId,
+    nextColumnId,
+    dndOrderedColumns
+  ) => {
+    const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id)
+    const newBoard = { ...board }
+    newBoard.columns = dndOrderedColumns
+    newBoard.columnOrderIds = dndOrderedColumnsIds
+    setBoard(newBoard)
+
+    let prevCardOrderIds = dndOrderedColumns.find(
+      (c) => c._id === prevColumnId
+    )?.cardOrderIds
+    if (prevCardOrderIds[0].includes('placeholder-card')) prevCardOrderIds = []
+
+    moveCardToDifferentColumnsApi({
+      currentCardId,
+      prevColumnId,
+      prevCardOrderIds,
+      nextColumnId,
+      nextCardOrderIds: dndOrderedColumns.find((c) => c._id === nextColumnId)
+        ?.cardOrderIds
+    })
+  }
+
+  if (!board) {
+    return <Box>Is loading...</Box>
+  }
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
       <AppBar />
@@ -97,6 +158,8 @@ function Board() {
         createNewColumn={createNewColumn}
         createNewCard={createNewCard}
         moveColumns={moveColumns}
+        moveCardInTheSameColumn={moveCardInTheSameColumn}
+        moveCardToDifferentColumns={moveCardToDifferentColumns}
       />
     </Container>
   )
