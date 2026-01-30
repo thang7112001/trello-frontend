@@ -12,12 +12,14 @@ import {
   createNewColumnAPI,
   updateBoardDetailsAPI,
   updateColumnDetailsAPI,
-  moveCardToDifferentColumnsApi
+  moveCardToDifferentColumnsApi,
+  deleteColumnDetailsAPI
 } from '../../apis'
 import { generatePlaceholder } from '../../utils/formatter'
 import { isEmpty } from 'lodash'
 import { mapOrder } from '../../utils/sort'
 import { Box } from '@mui/material'
+import { toast } from 'react-toastify'
 
 function Board() {
   const [board, setBoard] = useState(null)
@@ -110,6 +112,7 @@ function Board() {
     const columnToUpdate = newBoard.columns.find(
       (columns) => columns._id === columnId
     )
+
     if (columnToUpdate) {
       columnToUpdate.cards = dndOrderedCards
       columnToUpdate.cardOrderIds = dndOrderedCardIds
@@ -145,6 +148,19 @@ function Board() {
         ?.cardOrderIds
     })
   }
+  //xử lý xóa column
+  const deleteColumnDetails = (columnId) => {
+    const newBoard = { ...board }
+    newBoard.columns = newBoard.columns.filter((c) => c._id !== columnId)
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter(
+      (_id) => _id !== columnId
+    )
+    setBoard(newBoard)
+
+    deleteColumnDetailsAPI(columnId).then((res) => {
+      toast.success(res?.deleteResult)
+    })
+  }
 
   if (!board) {
     return <Box>Is loading...</Box>
@@ -160,6 +176,7 @@ function Board() {
         moveColumns={moveColumns}
         moveCardInTheSameColumn={moveCardInTheSameColumn}
         moveCardToDifferentColumns={moveCardToDifferentColumns}
+        deleteColumnDetails={deleteColumnDetails}
       />
     </Container>
   )
