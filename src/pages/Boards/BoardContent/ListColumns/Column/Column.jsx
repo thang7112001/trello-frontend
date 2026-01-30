@@ -223,6 +223,7 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
               }}
             >
               <Button
+                sx={{ color: 'black' }}
                 startIcon={<AddCardIcon />}
                 onClick={toggleOpenNewCardForm}
               >
@@ -243,16 +244,17 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
             >
               <TextField
                 sx={{
-                  '& label': { color: 'white' },
-                  '& input': { color: 'white' },
-                  '& label.Mui-focused': { color: 'white' },
+                  '& label': { color: 'black' },
+                  '& input': { color: 'black' },
+                  '& label.Mui-focused': { color: 'black' },
                   '& .MuiOutlinedInput-root': {
-                    '& fieldset': { borderColor: 'white' },
-                    '&:hover fieldset': { borderColor: 'white' },
-                    '&.Mui-focused fieldset': { borderColor: 'red' }
+                    '& fieldset': { borderColor: 'primary.main' },
+                    '&:hover fieldset': { borderColor: 'primary.main' },
+                    '& .Mui-focused fieldset': { borderColor: 'red' }
                   },
                   '& .MuiOutlinedInput-input': {
-                    borderRadius: 1
+                    borderRadius: 0,
+                    borderColor: 'primary.main'
                   }
                 }}
                 label='Enter card title'
