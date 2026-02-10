@@ -10,18 +10,23 @@ import { useState } from 'react'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 import { toast } from 'react-toastify'
+import { generatePlaceholder } from '../../../../utils/formatter'
+import { cloneDeep } from 'lodash'
+import { createNewColumnAPI } from '../../../../apis'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  selectCurrentActiveBoard,
+  updateCurrentActiveBoard
+} from '../../../../redux/activeBoard/activeBoardSlice'
 
-function ListColumns({
-  columns,
-  createNewColumn,
-  createNewCard,
-  deleteColumnDetails
-}) {
+function ListColumns({ columns }) {
+  const dispatch = useDispatch()
+  const board = useSelector(selectCurrentActiveBoard)
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
   // const [searchValue, setSearchValue] = useState(null)
   const [newColumnTitle, setNewColumnTitle] = useState('')
-  const addNewColumn = () => {
+  const addNewColumn = async () => {
     if (!newColumnTitle) {
       toast.error('please enter column title')
       return
@@ -32,7 +37,19 @@ function ListColumns({
       title: newColumnTitle
     }
 
-    createNewColumn(newColumnData)
+    const createdColumn = await createNewColumnAPI({
+      ...newColumnData,
+      boardId: board?._id
+    })
+
+    //xử lý kéo thả card khi tạo column mới rỗng
+    createdColumn.cards = [generatePlaceholder(createdColumn)]
+    createdColumn.cardOrderIds = [generatePlaceholder(createdColumn)._id]
+    //dùng clonedeep vì vấn đề Immutability của redux, hàm push làm thay đổi giá trị mảng nên ko dùng spread operator(shallow copy) để copy đc
+    const newBoard = cloneDeep(board)
+    newBoard.columns.push(createdColumn)
+    newBoard.columnOrderIds.push(createdColumn._id)
+    dispatch(updateCurrentActiveBoard(newBoard))
 
     toggleOpenNewColumnForm()
     setNewColumnTitle('')
@@ -55,14 +72,7 @@ function ListColumns({
         }}
       >
         {columns?.map((column) => {
-          return (
-            <Column
-              key={column._id}
-              column={column}
-              createNewCard={createNewCard}
-              deleteColumnDetails={deleteColumnDetails}
-            />
-          )
+          return <Column key={column._id} column={column} />
         })}
         {!openNewColumnForm ? (
           <Box
