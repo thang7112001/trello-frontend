@@ -286,12 +286,11 @@ function Column({ column }) {
                   '& label.Mui-focused': { color: 'black' },
                   '& .MuiOutlinedInput-root': {
                     '& fieldset': { borderColor: 'primary.main' },
-                    '&:hover fieldset': { borderColor: 'primary.main' },
-                    '& .Mui-focused fieldset': { borderColor: 'red' }
+                    '&:hover fieldset': { borderColor: 'primary.main' }
                   },
                   '& .MuiOutlinedInput-input': {
                     borderRadius: 0,
-                    borderColor: 'primary.main'
+                    borderColor: 'white'
                   }
                 }}
                 label='Enter card title'

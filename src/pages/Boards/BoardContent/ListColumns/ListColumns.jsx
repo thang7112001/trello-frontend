@@ -113,7 +113,7 @@ function ListColumns({ columns }) {
                 minWidth: '120px',
                 maxWidth: '250px',
                 '& label': { color: 'white' },
-                '& input': { color: 'white' },
+
                 '& label.Mui-focused': { color: 'white' },
                 '& .MuiOutlinedInput-root': {
                   '& fieldset': { borderColor: 'white' },

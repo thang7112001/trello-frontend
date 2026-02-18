@@ -167,6 +167,11 @@ const theme = extendTheme({
             },
             '& fieldset': {
               borderWidth: '1px !important'
+            },
+            '& input:-webkit-autofill': {
+              // Dùng box-shadow để che đi màu tím mặc định.
+              // Sử dụng theme.vars... để nó tự đổi màu theo Light/Dark mode
+              WebkitBoxShadow: `0 0 0 100px ${theme.vars.palette.primary.main} inset !important`
             }
           }
         }

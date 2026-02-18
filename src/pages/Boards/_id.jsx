@@ -25,20 +25,20 @@ import { cloneDeep } from 'lodash'
 function Board() {
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
-  const { id } = useParams()
+  const { boardID } = useParams()
 
   useEffect(() => {
     const loadBoard = async () => {
-      if (!id) return
+      if (!boardID) return
       try {
-        dispatch(fetchBoardDetailsAPI(id))
+        dispatch(fetchBoardDetailsAPI(boardID))
       } catch (err) {
         console.error('Failed to fetch board', err)
       }
     }
 
     loadBoard()
-  }, [dispatch, id])
+  }, [dispatch, boardID])
 
   //gọi api kkhi kéo thả column xong
   const moveColumns = (dndOrderedColumns) => {

@@ -10,19 +10,23 @@ import { ThemeProvider } from '@mui/material/styles'
 import { ToastContainer } from 'react-toastify'
 import { ConfirmProvider } from 'material-ui-confirm'
 
+import { BrowserRouter } from 'react-router-dom'
+
 createRoot(document.getElementById('root')).render(
-  <Provider store={store}>
-    <ThemeProvider theme={theme} defaultMode='system'>
-      <ConfirmProvider
-        defaultOptions={{
-          cancellationButtonProps: { color: 'error' },
-          confirmationButtonProps: { color: 'success', variant: 'outlined' }
-        }}
-      >
-        <CssBaseline />
-        <App />
-        <ToastContainer theme='colored' position='bottom-left' />
-      </ConfirmProvider>
-    </ThemeProvider>
-  </Provider>
+  <BrowserRouter basename='/'>
+    <Provider store={store}>
+      <ThemeProvider theme={theme} defaultMode='system'>
+        <ConfirmProvider
+          defaultOptions={{
+            cancellationButtonProps: { color: 'error' },
+            confirmationButtonProps: { color: 'success', variant: 'outlined' }
+          }}
+        >
+          <CssBaseline />
+          <App />
+          <ToastContainer theme='colored' position='bottom-left' />
+        </ConfirmProvider>
+      </ThemeProvider>
+    </Provider>
+  </BrowserRouter>
 )
