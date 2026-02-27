@@ -12,8 +12,6 @@ import {
   moveCardToDifferentColumnsApi
 } from '../../apis'
 
-import { Box } from '@mui/material'
-
 import {
   fetchBoardDetailsAPI,
   updateCurrentActiveBoard,
@@ -21,6 +19,8 @@ import {
 } from '../../redux/activeBoard/activeBoardSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { cloneDeep } from 'lodash'
+
+import PageLoadingSpinner from '../../components/Loading/PageLoadingSpinner'
 
 function Board() {
   const dispatch = useDispatch()
@@ -101,7 +101,7 @@ function Board() {
   }
 
   if (!board) {
-    return <Box>Is loading...</Box>
+    return <PageLoadingSpinner caption='Loading Board...' />
   }
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>

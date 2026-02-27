@@ -1,5 +1,5 @@
-import { Button, TextField, Box, Typography } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Button, TextField, Box, Typography, Alert } from '@mui/material'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import {
   FIELD_REQUIRED_MESSAGE,
@@ -17,9 +17,15 @@ function LoginForm() {
     formState: { errors }
   } = useForm()
 
+  // Sửa lại import useSearchParams từ react-router-dom
+  let [searchParams] = useSearchParams()
+  const registeredEmail = searchParams.get('registeredEmail')
+  const verifiedEmail = searchParams.get('verifiedEmail')
+
   const submitLogIn = (data) => {
     console.log(data)
   }
+
   return (
     <form onSubmit={handleSubmit(submitLogIn)} style={{ width: '100%' }}>
       <Box
@@ -31,31 +37,71 @@ function LoginForm() {
           mt: 1
         }}
       >
-        <TextField
-          label='Email'
-          variant='outlined'
-          fullWidth
-          type='text'
-          autoFocus
-          error={!!errors['email']}
-          {...register('email', {
-            required: FIELD_REQUIRED_MESSAGE,
-            pattern: { value: EMAIL_RULE, message: EMAIL_RULE_MESSAGE }
-          })}
-        />
-        <FieldErrorAlert errors={errors} fieldName={'email'} />
-        <TextField
-          label='password'
-          type='password'
-          variant='outlined'
-          fullWidth
-          error={!!errors['password']}
-          {...register('password', {
-            required: FIELD_REQUIRED_MESSAGE,
-            pattern: { value: PASSWORD_RULE, message: PASSWORD_RULE_MESSAGE }
-          })}
-        />
-        <FieldErrorAlert errors={errors} fieldName={'password'} />
+        {verifiedEmail && (
+          <Alert
+            severity='success'
+            sx={{ '.MuiAlert-message': { overflow: 'hidden' } }}
+          >
+            Your email&nbsp;
+            <Typography
+              variant='span'
+              sx={{ fontWeight: 'bold', '&:hover': { color: '#fdba26' } }}
+            >
+              {verifiedEmail}
+            </Typography>
+            &nbsp;has been verified.
+            <br />
+            Now you can login to enjoy our services! Have a good day!
+          </Alert>
+        )}
+
+        {registeredEmail && (
+          <Alert
+            severity='info'
+            sx={{ '.MuiAlert-message': { overflow: 'hidden' } }}
+          >
+            An email has been sent to&nbsp;
+            <Typography
+              variant='span'
+              sx={{ fontWeight: 'bold', '&:hover': { color: '#fdba26' } }}
+            >
+              {registeredEmail}
+            </Typography>
+            <br />
+            Please check and verify your account before logging in!
+          </Alert>
+        )}
+
+        <Box>
+          <TextField
+            label='Email'
+            variant='outlined'
+            fullWidth
+            type='text'
+            autoFocus
+            error={!!errors['email']}
+            {...register('email', {
+              required: FIELD_REQUIRED_MESSAGE,
+              pattern: { value: EMAIL_RULE, message: EMAIL_RULE_MESSAGE }
+            })}
+          />
+          <FieldErrorAlert errors={errors} fieldName={'email'} />
+        </Box>
+
+        <Box>
+          <TextField
+            label='Password'
+            type='password'
+            variant='outlined'
+            fullWidth
+            error={!!errors['password']}
+            {...register('password', {
+              required: FIELD_REQUIRED_MESSAGE,
+              pattern: { value: PASSWORD_RULE, message: PASSWORD_RULE_MESSAGE }
+            })}
+          />
+          <FieldErrorAlert errors={errors} fieldName={'password'} />
+        </Box>
 
         <Button
           className='interceptor-loading'
