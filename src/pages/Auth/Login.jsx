@@ -1,5 +1,5 @@
 import { Button, TextField, Box, Typography, Alert } from '@mui/material'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import {
   FIELD_REQUIRED_MESSAGE,
@@ -9,8 +9,13 @@ import {
   EMAIL_RULE_MESSAGE
 } from '../../utils/validators'
 import FieldErrorAlert from '../../components/form/FieldErrorAlert'
+import { useDispatch } from 'react-redux'
+import { loginUserApi } from '../../redux/user/userSlice'
+import { toast } from 'react-toastify'
 
 function LoginForm() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -23,7 +28,16 @@ function LoginForm() {
   const verifiedEmail = searchParams.get('verifiedEmail')
 
   const submitLogIn = (data) => {
-    console.log(data)
+    const { email, password } = data
+    toast
+      .promise(dispatch(loginUserApi({ email, password })), {
+        pending: 'Logging in...'
+      })
+      .then((res) => {
+        console.log(res)
+        //kieẻm tra nếu ko có lỗi thì mới redirect về route /
+        if (!res.error) navigate('/')
+      })
   }
 
   return (
