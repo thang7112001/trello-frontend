@@ -1,10 +1,20 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom'
 import Board from './pages/Boards/_id'
 import ASCIIText from './pages/404 NOT FOUND/ASCIIText'
 import Auth from './pages/Auth/Authentication'
 import AccountVerification from './pages/Auth/AccountVerification'
+import { useSelector } from 'react-redux'
+import { selectCurrentUser } from './redux/user/userSlice'
+
+const ProtectedRoute = ({ user }) => {
+  if (!user) {
+    return <Navigate to='/login' replace={true} />
+  }
+  return <Outlet />
+}
 
 function App() {
+  const currentUser = useSelector(selectCurrentUser)
   return (
     <Routes>
       <Route
@@ -13,7 +23,10 @@ function App() {
           <Navigate to='/boards/6955e964d974768f6222a0e2' replace={true} />
         }
       />
-      <Route path='/boards/:boardID' element={<Board />} />
+      {/*những route chỉ cho phép truy cập sauy khi đã login */}
+      <Route element={<ProtectedRoute user={currentUser} />}>
+        <Route path='/boards/:boardID' element={<Board />} />
+      </Route>
 
       {/*authentication */}
       <Route path='/login' element={<Auth />} />

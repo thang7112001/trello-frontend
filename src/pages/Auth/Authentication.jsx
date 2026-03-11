@@ -7,12 +7,19 @@ import RegisterForm from './Register'
 import Typography from '@mui/material/Typography'
 import TrelloIcon from '../../assets/mdi--trello.svg?react'
 import SvgIcon from '@mui/material/SvgIcon'
+import { useSelector } from 'react-redux'
+import { selectCurrentUser } from '../../redux/user/userSlice'
 
 function Auth() {
   const location = useLocation()
 
   const isLogin = location.pathname === '/login'
   const isRegister = location.pathname === '/register'
+
+  const currentUser = useSelector(selectCurrentUser)
+  if (currentUser) {
+    return <Navigate to='/' replace={true} />
+  }
 
   if (!isLogin && !isRegister) {
     return <Navigate to='/login' replace={true} />

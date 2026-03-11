@@ -37,7 +37,7 @@ authorizeAxiosInstance.interceptors.response.use(
   (error) => {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     interceptorLoadingElements(false)
-    console.log(error)
+
     let errorMessage = error?.message
     if (error.response?.data?.message) {
       errorMessage = error.response?.data?.message
