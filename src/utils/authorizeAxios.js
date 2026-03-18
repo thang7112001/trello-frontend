@@ -84,6 +84,8 @@ authorizeAxiosInstance.interceptors.response.use(
             refreshTokenPromise = null
           })
       }
+
+      // eslint-disable-next-line no-unused-vars
       return refreshTokenPromise.then((accessToken) => {
         //return laij axios instance kết hợp các originalRequests để gọi lại những api ban đầu bị lỗi
         return authorizeAxiosInstance(originalRequests)

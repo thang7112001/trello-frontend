@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 import CssBaseline from '@mui/material/CssBaseline'
+import GlobalStyles from '@mui/material/GlobalStyles'
 import theme from './theme.js'
 import { Provider } from 'react-redux'
 import { store } from './redux/store'
@@ -32,6 +33,7 @@ createRoot(document.getElementById('root')).render(
               confirmationButtonProps: { color: 'success', variant: 'outlined' }
             }}
           >
+            <GlobalStyles styles={{ a: { textDecoration: 'none' } }} />
             <CssBaseline />
             <App />
             <ToastContainer theme='colored' position='bottom-left' />
