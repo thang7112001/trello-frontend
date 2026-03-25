@@ -10,7 +10,7 @@ const LIMIT_COMMON_FILE_SIZE = 10485760 // 10MB
 const ALLOW_COMMON_FILE_TYPES = ['image/jpg', 'image/jpeg', 'image/png']
 
 export const singleFileValidator = (file) => {
-  if (!file || !file.name) {
+  if (!file || !file.name || !file.size) {
     return 'File cannot be empty.'
   }
   if (file.size > LIMIT_COMMON_FILE_SIZE) {

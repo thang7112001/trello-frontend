@@ -41,7 +41,7 @@ function Settings() {
             value={activeTab}
             onChange={handleChangeTab}
             aria-label='settings tabs'
-            textColor='text.primary'
+            color='secondary.main'
             sx={{
               '& .MuiTabs-indicator': {
                 backgroundColor: 'text.primary',
