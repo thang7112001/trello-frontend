@@ -15,6 +15,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import { useForm, Controller } from 'react-hook-form'
 import { FIELD_REQUIRED_MESSAGE } from '../../utils/validators'
 import FieldErrorAlert from '../../components/form/FieldErrorAlert'
+import { createNewBoardAPI } from '../../apis'
 
 const modalStyle = {
   position: 'absolute',
@@ -29,7 +30,7 @@ const modalStyle = {
   outline: 'none'
 }
 
-function CreateBoardModal({ isOpen, handleClose }) {
+function CreateBoardModal({ isOpen, handleClose, afterCreateNewBoard }) {
   const {
     register,
     handleSubmit,
@@ -46,9 +47,10 @@ function CreateBoardModal({ isOpen, handleClose }) {
     console.log('Dữ liệu tạo board:', data)
     // Gọi API ở đây...
 
-    // Sau khi tạo xong thì đóng modal và reset form
-    // handleClose()
-    // reset()
+    createNewBoardAPI(data).then(() => {
+      handleClose()
+      afterCreateNewBoard()
+    })
   }
 
   // Hàm hỗ trợ đóng Modal và clear dữ liệu đang nhập dở
@@ -136,7 +138,7 @@ function CreateBoardModal({ isOpen, handleClose }) {
             />
           </Box>
 
-          {/* Radio Buttons cho Type */}
+          {/* Radio Buttons cho Type, vì radio gr của mui ko register đc nên phải dùng controller */}
           <FormControl>
             <Controller
               name='type'

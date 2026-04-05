@@ -17,7 +17,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Profile from './Menus/Profile'
 import CreateIcon from '@mui/icons-material/Create'
 import { useState } from 'react'
-import { InputAdornment } from '@mui/material'
+import { colors, InputAdornment } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
 import { Link } from 'react-router-dom'
@@ -40,7 +40,9 @@ function AppBar() {
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <AppsIcon />
+          <Link to='/boards' style={{ color: 'inherit' }}>
+            <AppsIcon sx={{ verticalAlign: 'middle' }} />
+          </Link>
           <Link to='/' style={{ color: 'inherit' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
               <SvgIcon component={TrelloIcon} fontSize='small' inheritViewBox />

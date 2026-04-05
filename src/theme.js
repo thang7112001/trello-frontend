@@ -152,7 +152,7 @@ const theme = extendTheme({
       styleOverrides: {
         root: ({ theme }) => {
           return {
-            color: theme.vars.palette.secondary.main,
+            // color: theme.vars.palette.secondary.main,
             fontSize: '0.875rem',
             '.MuiOutlinedInput-notchedOutline': {
               borderColor: theme.vars.palette.secondary.main

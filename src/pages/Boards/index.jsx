@@ -23,10 +23,12 @@ import Pagination from '@mui/material/Pagination'
 import PaginationItem from '@mui/material/PaginationItem'
 import PageLoadingSpinner from '../../components/Loading/PageLoadingSpinner'
 import CreateBoardModal from './create'
+import { fetchBoardAPI } from '../../apis'
+import { DEFAULT_ITEM_PER_PAGE, DEFAULT_PAGE } from '../../utils/constants'
 
 function Boards() {
   const [boards, setBoards] = useState(null)
-
+  const [totalBoards, setTotalBoards] = useState(null)
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false)
 
   // Xử lý phân trang từ url với MUI: https://mui.com/material-ui/react-pagination/#router-integration
@@ -42,14 +44,20 @@ function Boards() {
    */
   const page = parseInt(query.get('page') || '1', 10)
 
-  useEffect(() => {
-    // Fake tạm 16 cái item thay cho boards
-    // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-    setBoards([...Array(16)].map((_, i) => i))
+  const updateStateData = (res) => {
+    setBoards(res.boards || [])
+    setTotalBoards(res.totalBoards || 0)
+  }
 
+  useEffect(() => {
     // Gọi API lấy danh sách boards ở đây...
-    // ...
-  }, [page]) // Thêm page vào dependency để mỗi khi page thay đổi thì gọi lại API
+    fetchBoardAPI(location.search).then(updateStateData)
+  }, [location.search]) // Thêm page vào dependency để mỗi khi page thay đổi thì gọi lại API
+
+  const afterCreateNewBoard = () => {
+    //fetch lai danh sachs board
+    fetchBoardAPI(location.search).then(updateStateData)
+  }
 
   if (!boards) {
     return <PageLoadingSpinner caption='loading boards...' />
@@ -129,7 +137,7 @@ function Boards() {
             <Box>
               <Grid container spacing={3}>
                 {boards.map((b) => (
-                  <Grid key={b}>
+                  <Grid key={b._id}>
                     <Card
                       sx={{
                         boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
@@ -143,14 +151,14 @@ function Boards() {
 
                       <CardContent sx={{ pb: 1 }}>
                         <Typography variant='h6' fontWeight='bold' gutterBottom>
-                          Board title {b}
+                          {b.title}
                         </Typography>
                         <Typography
                           variant='body2'
                           color='text.secondary'
                           noWrap
                         >
-                          This impressive paella is a perfect...
+                          {b?.description}
                         </Typography>
                       </CardContent>
 
@@ -158,7 +166,7 @@ function Boards() {
                         sx={{ justifyContent: 'flex-end', px: 2, pb: 2 }}
                       >
                         <Link
-                          to={`/boards/${b}`}
+                          to={`/boards/${b._id}`}
                           style={{
                             textDecoration: 'none',
                             color: '#1976d2',
@@ -174,34 +182,35 @@ function Boards() {
               </Grid>
 
               {/* Phân trang (Pagination) */}
-              <Box
-                sx={{
-                  my: 3,
-                  pr: 5,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'flex-end'
-                }}
-              >
-                <Pagination
-                  size='large'
-                  color='secondary'
-                  showFirstButton
-                  showLastButton
-                  // Giá trị page hiện tại lấy từ URL
-                  page={page}
-                  // Tổng số trang (fake tạm là 10 để test UI)
-                  count={10}
-                  // Sử dụng renderItem để custom thẻ bọc của từng số trang thành thẻ Link
-                  renderItem={(item) => (
-                    <PaginationItem
-                      component={Link}
-                      to={`/boards${item.page === 1 ? '' : `?page=${item.page}`}`}
-                      {...item}
-                    />
-                  )}
-                />
-              </Box>
+              {totalBoards > 0 && (
+                <Box
+                  sx={{
+                    my: 3,
+                    pr: 5,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end'
+                  }}
+                >
+                  <Pagination
+                    size='large'
+                    color='secondary'
+                    showFirstButton
+                    showLastButton
+                    // Giá trị page hiện tại lấy từ URL
+                    page={page}
+                    count={Math.ceil(totalBoards / DEFAULT_ITEM_PER_PAGE)}
+                    // Sử dụng renderItem để custom thẻ bọc của từng số trang thành thẻ Link
+                    renderItem={(item) => (
+                      <PaginationItem
+                        component={Link}
+                        to={`/boards${item.page === DEFAULT_PAGE ? '' : `?page=${item.page}`}`}
+                        {...item}
+                      />
+                    )}
+                  />
+                </Box>
+              )}
             </Box>
           )}
         </Box>
@@ -209,6 +218,7 @@ function Boards() {
       <CreateBoardModal
         isOpen={isOpenCreateModal}
         handleClose={() => setIsOpenCreateModal(false)}
+        afterCreateNewBoard={afterCreateNewBoard}
       />
     </Box>
   )
