@@ -7,7 +7,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import MailIcon from '@mui/icons-material/Mail'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
-import { styled } from '@mui/material/styles'
+
 import { useSelector, useDispatch } from 'react-redux'
 import { selectCurrentUser, updateUserAPI } from '../../redux/user/userSlice'
 import { useForm } from 'react-hook-form'
@@ -15,18 +15,7 @@ import { toast } from 'react-toastify'
 import { FIELD_REQUIRED_MESSAGE } from '../../utils/validators'
 import { singleFileValidator } from '../../utils/validators'
 import FieldErrorAlert from '../../components/form/FieldErrorAlert'
-
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 2
-})
+import VisuallyHiddenInput from '../../components/form/VisuallyHiddenInput'
 
 function AccountTab() {
   const dispatch = useDispatch()

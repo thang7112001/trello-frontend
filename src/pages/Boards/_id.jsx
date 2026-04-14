@@ -21,10 +21,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { cloneDeep } from 'lodash'
 
 import PageLoadingSpinner from '../../components/Loading/PageLoadingSpinner'
+import ActiveCard from '../../components/modal/ActiveCard/ActiveCard'
+import { selectCurrentActiveCard } from '../../redux/activeCard/activeCardSlice'
 
 function Board() {
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
+  const activeCard = useSelector(selectCurrentActiveCard)
   const { boardID } = useParams()
 
   useEffect(() => {
@@ -105,6 +108,8 @@ function Board() {
   }
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
+      {activeCard && <ActiveCard />}
+
       <AppBar />
       <BoardBar board={board} />
       <BoardContent
