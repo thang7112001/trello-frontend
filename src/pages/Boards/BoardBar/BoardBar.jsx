@@ -83,7 +83,7 @@ function BoardBar({ board }) {
           >
             Invite
           </Button>
-          <BoardUserGroup />
+          <BoardUserGroup boardUsers={board?.FE_allUser} />
         </Box>
       </Box>
     </div>
