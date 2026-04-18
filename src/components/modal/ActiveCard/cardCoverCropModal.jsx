@@ -4,7 +4,7 @@ import Modal from '@mui/material/Modal'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Cropper from 'react-easy-crop'
-import getCroppedImg from '../../../utils/cropImage.JS'
+import getCroppedImg from '../../../utils/cropImage.js'
 
 function CardCoverCropModal({ isOpen, imageSrc, onClose, onCropComplete }) {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
