@@ -36,7 +36,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   selectCurrentActiveCard,
   updateCurrentActiveCard,
-  clearCurrentActiveCard
+  clearAndHideCurrentActiveCard,
+  selectIsShowModalActiveCard
 } from '../../../redux/activeCard/activeCardSlice'
 import { updateCardDetailsAPI } from '../../../apis'
 import { updateCardInBoard } from '../../../redux/activeBoard/activeBoardSlice'
@@ -67,7 +68,8 @@ const SidebarItem = styled(Box)(({ theme }) => ({
 function ActiveCard() {
   const dispatch = useDispatch()
   const activeCard = useSelector(selectCurrentActiveCard)
-  //ko dùng state để check đóng mở modal nữa vì sẽ check bên board/_id
+  const isShowModalActiveCard = useSelector(selectIsShowModalActiveCard)
+  //ko dùng state để check đóng mở modal nữa vì sẽ check theo biến isShowModalActiveCard trong redux
   // const [isOpen, setIsOpen] = useState(true)
   // const handleOpenModal = () => setIsOpen(true)
 
@@ -75,7 +77,7 @@ function ActiveCard() {
   const [imageToCrop, setImageToCrop] = useState(null)
 
   const handleCloseModal = () => {
-    dispatch(clearCurrentActiveCard())
+    dispatch(clearAndHideCurrentActiveCard())
   }
   //function dùng chung cho các trường hợp update card title, description, comment,cover,...vv
   const callApiUpdateCard = async (updateData) => {
@@ -116,6 +118,10 @@ function ActiveCard() {
     // Reset input để có thể chọn lại đúng file đó nếu muốn
     event.target.value = ''
   }
+  //dùng async ở đây để component con card activity chờ nếu thành công thì mới clear thẻ input comment
+  const onAddCardComment = async (commentToAdd) => {
+    await callApiUpdateCard({ commentToAdd })
+  }
 
   const handleCropComplete = async (croppedBlob) => {
     let reqData = new FormData()
@@ -138,7 +144,7 @@ function ActiveCard() {
     <>
       <Modal
         disableScrollLock
-        open={true}
+        open={isShowModalActiveCard}
         onClose={handleCloseModal} // Sử dụng onClose trong trường hợp muốn đóng Modal bằng nút ESC hoặc click ra ngoài Modal
         sx={{ overflowY: 'auto' }}
       >
@@ -201,7 +207,7 @@ function ActiveCard() {
             {/* Feature 01: Xử lý tiêu đề của Card */}
             <ToggleFocusInput
               inputFontSize='22px'
-              value={activeCard.title}
+              value={activeCard?.title}
               onChangedValue={onUpdateCardTitle}
             />
           </Box>
@@ -256,7 +262,11 @@ function ActiveCard() {
                     Activity
                   </Typography>
                 </Box>
-                <CardActivitySection />
+                {/*feature 4 */}
+                <CardActivitySection
+                  cardComments={activeCard?.comments}
+                  onAddCardComment={onAddCardComment}
+                />
               </Box>
             </Grid>
 

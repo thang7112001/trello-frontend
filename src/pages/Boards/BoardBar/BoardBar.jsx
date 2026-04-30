@@ -7,9 +7,9 @@ import BoltIcon from '@mui/icons-material/Bolt'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import BoardUserGroup from './BoardUserGroup'
 import Tooltip from '@mui/material/Tooltip'
-import Button from '@mui/material/Button'
-import PersonAddIcon from '@mui/icons-material/PersonAdd'
+
 import { capitalizeFirstLetter } from '../../../utils/formatter'
+import InviteBoardUser from './InviteBoardUser'
 
 const MENU_STYLE = {
   color: 'secondary.main',
@@ -76,13 +76,7 @@ function BoardBar({ board }) {
           />
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Button
-            sx={{ color: 'secondary.main', borderColor: 'secondary.main' }}
-            variant='outlined'
-            startIcon={<PersonAddIcon />}
-          >
-            Invite
-          </Button>
+          <InviteBoardUser boardId={board._id} />
           <BoardUserGroup boardUsers={board?.FE_allUser} />
         </Box>
       </Box>
