@@ -10,17 +10,17 @@ import Starred from './Menus/Starred'
 import Templates from './Menus/Templates'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
-import Badge from '@mui/material/Badge'
+
 import Tooltip from '@mui/material/Tooltip'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Profile from './Menus/Profile'
 import CreateIcon from '@mui/icons-material/Create'
 import { useState } from 'react'
-import { colors, InputAdornment } from '@mui/material'
+import { InputAdornment } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
 import { Link } from 'react-router-dom'
+import Notifications from './Notifications/Notifications'
 
 function AppBar() {
   const [searchValue, setSearchValue] = useState('')
@@ -109,11 +109,7 @@ function AppBar() {
             }}
           />
           <ModeSelect />
-          <Tooltip title='Notiification'>
-            <Badge color='secondary' variant='dot' sx={{ cursor: 'pointer' }}>
-              <NotificationsNoneIcon />
-            </Badge>
-          </Tooltip>
+          <Notifications />
           <Tooltip title='Help'>
             <HelpOutlineIcon sx={{ cursor: 'pointer' }} />
           </Tooltip>

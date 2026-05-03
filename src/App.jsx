@@ -23,6 +23,7 @@ function App() {
       {/*những route chỉ cho phép truy cập sauy khi đã login */}
       <Route element={<ProtectedRoute user={currentUser} />}>
         <Route path='/boards/:boardID' element={<Board />} />
+
         <Route path='/boards' element={<Boards />} />
 
         <Route path='/settings/account' element={<Settings />} />
