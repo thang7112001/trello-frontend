@@ -14,6 +14,7 @@ import {
 } from '../../../utils/validators'
 import FieldErrorAlert from '../../../components/form/FieldErrorAlert'
 import { inviteUserToBoardAPI } from '../../../apis'
+import { socketIoInstance } from '../../../main'
 
 function InviteBoardUser({ boardId }) {
   /**
@@ -36,11 +37,13 @@ function InviteBoardUser({ boardId }) {
   } = useForm()
   const submitInviteUserToBoard = (data) => {
     const { inviteeEmail } = data
-    console.log('inviteeEmail:', inviteeEmail)
-    inviteUserToBoardAPI({ inviteeEmail, boardId }).then(() => {
+
+    inviteUserToBoardAPI({ inviteeEmail, boardId }).then((invitation) => {
       // Clear thẻ input sử dụng react-hook-form bằng setValue
       setValue('inviteeEmail', null)
       setAnchorPopoverElement(null)
+
+      socketIoInstance.emit('FE_USER_INVITED_TO_BOARD', invitation)
     })
   }
 
