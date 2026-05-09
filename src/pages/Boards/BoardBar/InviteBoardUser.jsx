@@ -14,7 +14,7 @@ import {
 } from '../../../utils/validators'
 import FieldErrorAlert from '../../../components/form/FieldErrorAlert'
 import { inviteUserToBoardAPI } from '../../../apis'
-import { socketIoInstance } from '../../../main'
+import { socketIoInstance } from '../../../socket'
 
 function InviteBoardUser({ boardId }) {
   /**

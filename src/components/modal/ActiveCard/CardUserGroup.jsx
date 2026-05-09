@@ -3,30 +3,53 @@ import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import Tooltip from '@mui/material/Tooltip'
 import Popover from '@mui/material/Popover'
-import Typography from '@mui/material/Typography'
+import Badge from '@mui/material/Badge'
 import AddIcon from '@mui/icons-material/Add'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import { useSelector } from 'react-redux'
+import { selectCurrentActiveBoard } from '../../../redux/activeBoard/activeBoardSlice'
+import { CARD_MEMBER_ACTIONS } from '../../../utils/constants'
 
-function CardUserGroup({ cardUsers = [], limit = 4 }) {
+function CardUserGroup({ cardMemberIds = [], onUpdateCardMembers }) {
   const [anchorPopoverElement, setAnchorPopoverElement] = useState(null)
   const isOpenPopover = Boolean(anchorPopoverElement)
   const popoverId = isOpenPopover ? 'card-all-users-popover' : undefined
+
+  // lấy activeboard ra để lấy thông tin các thành viên của board
+  const board = useSelector(selectCurrentActiveBoard)
+
+  // thành viên trong card là tập con của thành viên trong board
+  const FE_CardMembers = cardMemberIds.map((id) =>
+    board.FE_allUser.find((u) => u._id === id)
+  )
 
   const handleTogglePopover = (event) => {
     if (!anchorPopoverElement) setAnchorPopoverElement(event.currentTarget)
     else setAnchorPopoverElement(null)
   }
 
+  // Hàm xử lý khi click vào 1 user trong Popover để thêm/xóa khỏi card
+  const handleUpdateCardMembers = (user) => {
+    //tạo biến incomingMemberInfo để gửi cho BE, với 2 thông tin chính là userid và action thêm hoặc xóa user khỏi card
+    const incomingMemberInfo = {
+      userId: user._id,
+      action: cardMemberIds.includes(user._id)
+        ? CARD_MEMBER_ACTIONS.REMOVE
+        : CARD_MEMBER_ACTIONS.ADD
+    }
+    onUpdateCardMembers(incomingMemberInfo)
+  }
+
   return (
     <Box sx={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-      {/* Fake hiển thị user */}
-      {[...Array(6)].map((_, index) => {
-        if (index < limit) {
+      {FE_CardMembers?.map((user, index) => {
+        if (index < 4) {
           return (
-            <Tooltip title='thang711' key={index}>
+            <Tooltip title={user?.displayName} key={index}>
               <Avatar
                 sx={{ width: 34, height: 34, cursor: 'pointer' }}
-                alt='thang711'
-                src='https://res.cloudinary.com/drac9m53a/image/upload/v1774482949/users/wibvevl7fu4bt0zz0ffe.jpg'
+                alt={user?.displayName}
+                src={user?.avatar}
               />
             </Tooltip>
           )
@@ -72,13 +95,38 @@ function CardUserGroup({ cardUsers = [], limit = 4 }) {
         <Box
           sx={{
             p: 2,
-            maxWidth: '235px',
+            maxWidth: '260px',
             display: 'flex',
             flexWrap: 'wrap',
-            gap: 1
+            gap: 1.5
           }}
         >
-          <Typography variant='body2'>Add user to card feature...</Typography>
+          {/* Map toàn bộ user của Board ra đây */}
+          {board?.FE_allUser?.map((user, index) => (
+            <Tooltip title={user?.displayName} key={index}>
+              <Badge
+                sx={{ cursor: 'pointer' }}
+                overlap='rectangular'
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                // Nếu user._id đã có trong cardMemberIds thì hiện icon check màu xanh
+                badgeContent={
+                  cardMemberIds.includes(user._id) ? (
+                    <CheckCircleIcon
+                      fontSize='small'
+                      sx={{ color: '#27ae60' }}
+                    />
+                  ) : null
+                }
+                onClick={() => handleUpdateCardMembers(user)}
+              >
+                <Avatar
+                  sx={{ width: 34, height: 34 }}
+                  alt={user?.displayName}
+                  src={user?.avatar}
+                />
+              </Badge>
+            </Tooltip>
+          ))}
         </Box>
       </Popover>
     </Box>
